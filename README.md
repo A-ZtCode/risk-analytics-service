@@ -1,6 +1,6 @@
 # Risk Analytics Service
 
-A production-oriented VaR/CVaR engine with rigorous backtesting of the risk model itself. This project treats the risk model as a testable artefact, not a single number: forecasts are validated statistically against realised outcomes using standard regulatory tests.
+VaR/CVaR engine with rigorous backtesting of the risk model itself. This project treats the risk model as a testable artefact, not a single number: forecasts are validated statistically against realised outcomes using standard regulatory tests.
 
 ## What this is
 
