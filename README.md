@@ -4,7 +4,7 @@ VaR/CVaR engine with rigorous backtesting of the risk model itself. This project
 
 ## What this is
 
-Most portfolio risk projects compute a VaR figure and stop there. This one implements the piece that risk teams actually own day to day: does the model, when walked forward through history, produce the breach frequency it claims to? A 99% VaR that gets breached 5% of the time is not a 99% VaR, regardless of what the code prints.
+This project implements the piece that risk teams actually own day to day: does the model, when walked forward through history, produce the breach frequency it claims to? A 99% VaR that gets breached 5% of the time is not a 99% VaR, regardless of what the code prints.
 
 Currently implemented:
 
@@ -19,8 +19,6 @@ Currently implemented:
 - **Real-data ingestion via `yfinance`** (`data/market_data.py`), split/dividend-adjusted, with gap detection distinguishing market-wide missing days from per-asset gaps, feeding straight into the same VaR models and backtests as the synthetic demo
 - Full unit tests including analytical benchmarks against known distributions
 - CI-ready `pyproject.toml`, typed code, structured docstrings
-
-Everything originally on the roadmap is now implemented; see "Known limitations" below for what each piece explicitly does not do.
 
 ## Quick start
 
@@ -172,8 +170,6 @@ The `Gap report` line comes from `detect_gaps`: 45 missing business days over th
 **Why `network`-marked tests are excluded by default (`-m "not network"` in `pyproject.toml`).** This project's own design principle, stated since the very first demo script, is that the default test/demo path never depends on an external service (`generate_synthetic_returns`'s docstring: "so the demo runs without network access"). Yahoo Finance's API is unauthenticated, unversioned, and rate-limits aggressively — exactly the kind of dependency that makes CI flaky for reasons that have nothing to do with this codebase. `tests/test_market_data.py` splits accordingly: pure functions (`_normalize_prices`, `prices_to_returns`, `detect_gaps`) are tested against hand-built DataFrames matching yfinance's real output shape, with no network involved; only `fetch_prices`/`load_returns` themselves are marked `network` and require an explicit `pytest -m network` to run.
 
 ## Known limitations
-
-Documented plainly rather than hidden:
 
 1. **Historical VaR is blind to tail events not in the window.** A 250-day window starting in 2019 says nothing about 2008-style events.
 2. **VaR is not subadditive.** For two portfolios A and B, it is possible for VaR(A + B) > VaR(A) + VaR(B). This is why CVaR (which is coherent) is preferred by Basel III (FRTB).
